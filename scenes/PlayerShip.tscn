@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/PlayerShip.gd" type="Script" id=1]
+[ext_resource path="res://images/blueship.png" type="Texture" id=2]
+
+[node name="PlayerShip" type="KinematicBody2D" groups=[
+"player",
+]]
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+motion/sync_to_physics = false
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+build_mode = 0
+polygon = PoolVector2Array( 63.6951, -23.8891, 49.733, -3.88934, 50.1104, 4.78979, 63.6951, 24.7895, 36.1483, 38.7516, 1.43176, 47.0534, -31.0206, 41.3931, -64.2278, 25.9216, -56.6807, 8.94069, -56.6807, -11.4364, -63.8504, -28.7947, -35.9262, -42.0021, 1.80913, -46.5303, 33.1295, -40.87, 63.3178, -25.0211 )
+_sections_unfolded = [ "polygon" ]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="FiringPosition" type="Position2D" parent="."]
+position = Vector2( 64, 0 )
+
