@@ -2,11 +2,11 @@ extends Node2D
 
 const MOVEMENT = 200.0
 
-enum AI_STATUS { IDLE, TURNING, MOVING, TURN_TO_SHOOT, SHOOTING }
+enum AI_STATUS { IDLE, SLEEPING, TURNING, MOVING, TURN_TO_SHOOT, SHOOTING }
 enum ROGUE_STATUS { HONEST, ROGUE_HIDDEN, ROGUE }
 
 onready var node2d = $Node2D
-onready var registration = $Node2D/Registration
+onready var registration_label = $Node2D/Registration
 onready var body = $KinematicBody2D
 onready var firing_position = $KinematicBody2D/FiringPosition
 
@@ -14,6 +14,7 @@ onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
 var ai_status
 var rogue_status
+var registration
 var credits
 var shields
 var energy
@@ -50,14 +51,23 @@ func _physics_process(delta):
 	match ai_status:
 		IDLE:
 			process_idle(delta, miner_position)
+			registration_label.text = registration + ": IDLE"
+		SLEEPING:
+			process_sleep(delta)
+			registration_label.text = registration + ": SLEEPING"
 		TURNING:
 			process_turning(delta, miner_position)
+			registration_label.text = registration + ": TURNING"
 		MOVING:
 			process_moving(delta, miner_position)
+			registration_label.text = registration + ": MOVING"
 		TURN_TO_SHOOT:
 			process_turn_to_shoot(delta, miner_position)
+			registration_label.text = registration + ": TURN TO SHOOT"
 		SHOOTING:
 			process_shooting(delta, miner_position)
+			registration_label.text = registration + ": SHOOTING"
+
 	
 func get_rotation_angle(pos2, pos1):
 #	var x = pos2.x - pos1.x
@@ -67,12 +77,14 @@ func get_rotation_angle(pos2, pos1):
 	return pos2.angle_to_point(pos1)
 	
 func set_registration(text):
-	registration.text = text
+	registration = text
+	registration_label.text = text
 	
 func process_idle(delta, miner_position):
+	target = null
 	var rocks = get_tree().get_nodes_in_group("rocks")
 	var closest_rock = null
-	var closest_dist = 99999
+	var closest_dist = 9999999999
 	var closest_position
 	for rock in rocks:
 		var pos = rock.position
@@ -83,7 +95,6 @@ func process_idle(delta, miner_position):
 			closest_position = pos
 				
 	if closest_rock == null:
-		target = null
 		return
 		
 	target = weakref(closest_rock)
@@ -92,11 +103,31 @@ func process_idle(delta, miner_position):
 	
 	ai_status = TURNING
 	
+func process_sleep(delta):
+	var now = OS.get_ticks_msec()
+	if now - last_fired > 3000:
+		ai_status = IDLE
+	
 func process_turning(delta, miner_position):
+	if target == null:
+		last_fired = OS.get_ticks_msec()
+		ai_status = SLEEPING
+		target = null
+		return
+		
+	if !target.get_ref():
+		last_fired = OS.get_ticks_msec()
+		ai_status = SLEEPING
+		target = null
+		return
+		
 	var angle = body.rotation_degrees
 	var angle_delta
 	
-	if target_angle> angle:
+	target_position = target.get_ref().position
+	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	
+	if target_angle > angle:
 		angle_delta = 1
 	else:
 		angle_delta = -1
@@ -108,31 +139,33 @@ func process_turning(delta, miner_position):
 		
 func process_moving(delta, miner_position):
 	if !target.get_ref():
-		ai_status = IDLE
+		last_fired = OS.get_ticks_msec()
+		ai_status = SLEEPING
 		target = null
+		return
 		
 	thrust = MOVEMENT * delta
-	var angle = rad2deg(get_rotation_angle(target_position, miner_position))
-	body.rotation_degrees = angle
-	var direction = Vector2(thrust, 0).rotated(deg2rad(angle))
+	target_position = target.get_ref().position
+	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	body.rotation_degrees = target_angle
+	var direction = Vector2(thrust, 0).rotated(deg2rad(target_angle))
 	var collide = body.move_and_collide(direction)
 	node2d.position = body.position
 	
-	if target != null && target.get_ref() != null:
-		target_position = target.get_ref().position
-		target_distance = miner_position.distance_to(target_position)
-		if target_distance < 500:
-			firing_count = 0
-			ai_status = TURN_TO_SHOOT
+	target_distance = miner_position.distance_to(target_position)
+	if target_distance < 500:
+		firing_count = 0
+		ai_status = TURN_TO_SHOOT
 			
 func process_turn_to_shoot(delta, miner_position):
 	if !target.get_ref():
-		ai_status = IDLE
+		last_fired = OS.get_ticks_msec()
+		ai_status = SLEEPING
 		target = null
 		return
 
-	var pos = target.get_ref().position
-	target_angle = rad2deg(get_rotation_angle(pos, miner_position))
+	target_position = target.get_ref().position
+	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
 	
 	var angle = body.rotation_degrees
 	var angle_delta
@@ -147,6 +180,7 @@ func process_turn_to_shoot(delta, miner_position):
 	if target_angle_offset > 1:
 		body.rotate(deg2rad(angle_delta))
 	else:
+		firing_count = 0
 		ai_status = SHOOTING
 	
 func process_shooting(delta, miner_position):
@@ -160,5 +194,5 @@ func process_shooting(delta, miner_position):
 		firing_count += 1
 
 	if firing_count > 5:
-		ai_status = IDLE
+		ai_status = SLEEPING
 		target = null
