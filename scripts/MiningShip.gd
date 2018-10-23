@@ -69,13 +69,6 @@ func _physics_process(delta):
 			registration_label.text = registration + ": SHOOTING"
 
 	
-func get_rotation_angle(pos2, pos1):
-#	var x = pos2.x - pos1.x
-#	var y = pos2.y - pos1.y
-#	var angle = atan2(y, x)
-#	return angle
-	return pos2.angle_to_point(pos1)
-	
 func set_registration(text):
 	registration = text
 	registration_label.text = text
@@ -99,7 +92,7 @@ func process_idle(delta, miner_position):
 		
 	target = weakref(closest_rock)
 	target_position = closest_position
-	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	target_angle = rad2deg(target_position.angle_to_point(miner_position))
 	
 	ai_status = TURNING
 	
@@ -125,7 +118,7 @@ func process_turning(delta, miner_position):
 	var angle_delta
 	
 	target_position = target.get_ref().position
-	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	target_angle = rad2deg(target_position.angle_to_point(miner_position))
 	
 	if target_angle > angle:
 		angle_delta = 1
@@ -146,7 +139,7 @@ func process_moving(delta, miner_position):
 		
 	thrust = MOVEMENT * delta
 	target_position = target.get_ref().position
-	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	target_angle = rad2deg(target_position.angle_to_point(miner_position))
 	body.rotation_degrees = target_angle
 	var direction = Vector2(thrust, 0).rotated(deg2rad(target_angle))
 	var collide = body.move_and_collide(direction)
@@ -165,12 +158,12 @@ func process_turn_to_shoot(delta, miner_position):
 		return
 
 	target_position = target.get_ref().position
-	target_angle = rad2deg(get_rotation_angle(target_position, miner_position))
+	target_angle = rad2deg(target_position.angle_to_point(miner_position))
 	
 	var angle = body.rotation_degrees
 	var angle_delta
 	
-	if target_angle> angle:
+	if target_angle > angle:
 		angle_delta = 1
 	else:
 		angle_delta = -1
