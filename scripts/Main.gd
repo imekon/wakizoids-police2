@@ -21,6 +21,9 @@ onready var mining_ship = load("res://scenes/MiningShip.tscn")
 
 onready var player = $PlayerShip
 onready var scoreLabel = $HUD/ScoreLabel
+onready var rocksLabel = $HUD/RocksLabel
+onready var minersLabel = $HUD/MinersLabel
+onready var aliensLabel = $HUD/AliensLabel
 onready var scanner = $HUD/Scanner
 onready var miner_scanner = $HUD/MinerScanner
 
@@ -33,6 +36,9 @@ func _ready():
 	
 func _process(delta):
 	scoreLabel.text = "Score: " + str(player.score)
+	rocksLabel.text = "Rocks: " + str(get_tree().get_nodes_in_group("rocks").size())
+	minersLabel.text = "Miners: " + str(get_tree().get_nodes_in_group("mining_ship").size())
+	aliensLabel.text = "Aliens: " + str(get_tree().get_nodes_in_group("alien").size())
 	if Input.is_action_just_pressed("ui_long_range_scanner"):
 		scanner.set_long_range_scanner()
 	elif Input.is_action_just_pressed("ui_medium_range_scanner"):
@@ -44,7 +50,7 @@ func random_range(value):
 	return randi() % value - value / 2
 	
 func generate_rocks():
-	for i in range(20):
+	for i in range(40):
 		generate_rock(rock1, random_range(65536), random_range(65536))
 		generate_rock(rock2, random_range(65536), random_range(65536))
 		generate_rock(rock3, random_range(65536), random_range(65536))
