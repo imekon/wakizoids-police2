@@ -3,10 +3,9 @@ extends KinematicBody2D
 const MOVEMENT = 1000.0
 
 var start_time
-var player_owned
+var owner_ship
 
 func _ready():
-	player_owned = false
 	start_time = OS.get_unix_time()
 
 func _physics_process(delta):
@@ -24,3 +23,6 @@ func _physics_process(delta):
 	var now = OS.get_unix_time()
 	if now - start_time > 1:
 		queue_free()
+
+func set_owner(own):
+	owner_ship = own

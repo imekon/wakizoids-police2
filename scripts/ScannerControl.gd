@@ -59,7 +59,7 @@ func _draw():
 			rect = Rect2(x - 1, y - 1, 3, 3)
 			colour = Color(1.0, 0.5, 0.5)
 			draw_rect(rect, colour)
-		
+
 	# location of aliens
 	var aliens = get_tree().get_nodes_in_group("alien")
 	for alien in aliens:

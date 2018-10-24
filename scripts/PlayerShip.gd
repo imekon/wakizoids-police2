@@ -52,7 +52,7 @@ func fire():
 	var now = OS.get_ticks_msec()
 	if now - last_fired > 100:
 		var bullet = bullet_resource.instance()
-		bullet.player_owned = true
+		bullet.set_owner(self)
 		bullet.position = firing_position.global_position
 		bullet.rotate(rotation)
 		get_parent().add_child(bullet)

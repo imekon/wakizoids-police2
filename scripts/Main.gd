@@ -22,6 +22,7 @@ onready var mining_ship = load("res://scenes/MiningShip.tscn")
 onready var player = $PlayerShip
 onready var scoreLabel = $HUD/ScoreLabel
 onready var scanner = $HUD/Scanner
+onready var miner_scanner = $HUD/MinerScanner
 
 func _ready():
 	randomize()
