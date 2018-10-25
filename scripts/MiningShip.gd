@@ -1,6 +1,7 @@
 extends Node2D
 
 const MOVEMENT = 200.0
+const SLEEP_TIME = 30000
 
 enum AI_STATUS { IDLE, SLEEPING, TURNING, MOVING, TURN_TO_SHOOT, SHOOTING }
 enum ROGUE_STATUS { HONEST, ROGUE_HIDDEN, ROGUE }
@@ -109,7 +110,7 @@ func plot_course_to_target(miner_position):
 
 func process_sleep(delta):
 	var now = OS.get_ticks_msec()
-	if now - last_fired > 3000:
+	if now - last_fired > SLEEP_TIME:
 		ai_status = IDLE
 
 func process_turning(delta, miner_position):

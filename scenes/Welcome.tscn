@@ -114,7 +114,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_fonts/normal_font = SubResource( 2 )
 bbcode_enabled = true
-bbcode_text = "This is an entry to Godot Wild Jam no. 2, 2018
+bbcode_text = "This was an entry to Godot Wild Jam no. 2, 2018
 Copyright (c) 2018 Pete Goodwin
 Theme: \"Hidden Within\"
 You are a police agent patrolling space. Your mission is to protect miners, respond to distress calls and persue pirates. Aliens are also present but much less so.
@@ -123,7 +123,7 @@ visible_characters = -1
 percent_visible = 1.0
 meta_underlined = true
 tab_size = 4
-text = "This is an entry to Godot Wild Jam no. 2, 2018
+text = "This was an entry to Godot Wild Jam no. 2, 2018
 Copyright (c) 2018 Pete Goodwin
 Theme: \"Hidden Within\"
 You are a police agent patrolling space. Your mission is to protect miners, respond to distress calls and persue pirates. Aliens are also present but much less so.

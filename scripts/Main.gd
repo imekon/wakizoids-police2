@@ -29,14 +29,15 @@ onready var miner_scanner = $HUD/MinerScanner
 
 func _ready():
 	randomize()
-	generate_rocks()
+	generate_rocks(40)
 	generate_mining_ships()
 	generate_alien_ships()
 	generate_planets()
 	
-func _process(delta):
+func _physics_process(delta):
 	scoreLabel.text = "Score: " + str(player.score)
-	rocksLabel.text = "Rocks: " + str(get_tree().get_nodes_in_group("rocks").size())
+	var rock_count = get_tree().get_nodes_in_group("rocks").size()
+	rocksLabel.text = "Rocks: " + str(rock_count)
 	minersLabel.text = "Miners: " + str(get_tree().get_nodes_in_group("mining_ship").size())
 	aliensLabel.text = "Aliens: " + str(get_tree().get_nodes_in_group("alien").size())
 	if Input.is_action_just_pressed("ui_long_range_scanner"):
@@ -45,12 +46,15 @@ func _process(delta):
 		scanner.set_medium_range_scanner()
 	elif Input.is_action_just_pressed("ui_short_range_scanner"):
 		scanner.set_short_range_scanner()
+		
+	if rock_count < 50:
+		generate_rocks(20)
 	
 func random_range(value):
 	return randi() % value - value / 2
 	
-func generate_rocks():
-	for i in range(40):
+func generate_rocks(count):
+	for i in range(count):
 		generate_rock(rock1, random_range(65536), random_range(65536))
 		generate_rock(rock2, random_range(65536), random_range(65536))
 		generate_rock(rock3, random_range(65536), random_range(65536))
