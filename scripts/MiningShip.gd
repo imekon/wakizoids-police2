@@ -20,6 +20,7 @@ var credits
 var shields
 var energy
 var thrust
+# var targeting_helper
 var target
 var target_position
 var target_angle
@@ -30,6 +31,8 @@ var last_fired = 0
 var firing_count
 
 func _ready():
+	# var target_helper_resource = load("res://scripts/TargetingHelper.gd")
+	# targeting_helper = target_helper_resource.new()
 	ai_status = IDLE
 	rogue_status = HONEST
 	credits = 0

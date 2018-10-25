@@ -17,7 +17,7 @@ func _physics_process(delta):
 		if collide.collider.is_in_group("mining_ship"):
 			collide.collider.get_parent().queue_free()
 		elif collide.collider.is_in_group("alien"):
-			collide.collider.queue_free()
+			collide.collider.damage(30)
 		queue_free()
 	
 	var now = OS.get_unix_time()
