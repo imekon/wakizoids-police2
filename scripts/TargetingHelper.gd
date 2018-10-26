@@ -10,6 +10,9 @@ func _init():
 	target_position = Vector2(0, 0)
 	target_angle = 0
 	last_fired = OS.get_ticks_msec()
+	
+func clear():
+	target = null
 
 func set_target(what):
 	last_fired = OS.get_ticks_msec()
