@@ -48,6 +48,9 @@ func _physics_process(delta):
 	
 	thrust *= 0.9
 	
+func add_credit(amount):
+	pass
+	
 func fire():
 	var now = OS.get_ticks_msec()
 	if now - last_fired > 100:

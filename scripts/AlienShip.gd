@@ -38,6 +38,9 @@ func _physics_process(delta):
 		SHOOTING:
 			process_shooting(delta)
 			
+func add_credit(amount):
+	pass
+			
 func damage(amount):
 	shields -= amount
 	if shields < 0:

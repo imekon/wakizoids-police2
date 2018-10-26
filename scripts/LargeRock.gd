@@ -8,5 +8,7 @@ func _ready():
 
 func on_body_entered(body):
 	if body.is_in_group("bullet"):
+		if body.owner_ship.get_ref():
+			body.owner_ship.get_ref().add_credit(20)
 		body.queue_free()
 		queue_free()

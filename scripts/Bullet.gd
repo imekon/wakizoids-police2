@@ -25,4 +25,4 @@ func _physics_process(delta):
 		queue_free()
 
 func set_owner(own):
-	owner_ship = own
+	owner_ship = weakref(own)

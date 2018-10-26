@@ -46,30 +46,37 @@ func _ready():
 
 func _physics_process(delta):
 	var miner_position = body.global_position
+	
+	var status_text = "NOT SET"
 
 	match ai_status:
 		IDLE:
 			process_idle(delta, miner_position)
-			registration_label.text = registration + ": IDLE"
+			status_text = registration + ": IDLE"
 		SLEEPING:
 			process_sleep(delta)
-			registration_label.text = registration + ": SLEEPING"
+			status_text = registration + ": SLEEPING"
 		TURNING:
 			process_turning(delta, miner_position)
-			registration_label.text = registration + ": TURNING"
+			status_text = registration + ": TURNING"
 		MOVING:
 			process_moving(delta, miner_position)
-			registration_label.text = registration + ": MOVING > %1.2f" % last_distance
+			status_text = registration + ": MOVING - %1.1f" % last_distance
 		TURN_TO_SHOOT:
 			process_turn_to_shoot(delta, miner_position)
-			registration_label.text = registration + ": TURN TO SHOOT"
+			status_text = registration + ": TURN TO SHOOT"
 		SHOOTING:
 			process_shooting(delta, miner_position)
-			registration_label.text = registration + ": SHOOTING"
+			status_text = registration + ": SHOOTING"
+			
+	registration_label.text = status_text + ": CREDITS %d" % credits
 
 func set_registration(text):
 	registration = text
 	registration_label.text = text
+	
+func add_credit(amount):
+	credits += amount
 
 func process_idle(delta, miner_position):
 	target = null
@@ -98,12 +105,12 @@ func process_idle(delta, miner_position):
 func plot_course_to_target(miner_position):
 	if target == null:
 		last_fired = OS.get_ticks_msec()
-		ai_status = null
+		ai_status = IDLE
 		return false
 	
 	if !target.get_ref():
 		last_fired = OS.get_ticks_msec()
-		ai_status = null
+		ai_status = IDLE
 		target = null
 		return false
 		
@@ -173,7 +180,7 @@ func process_shooting(delta, miner_position):
 	var now = OS.get_ticks_msec()
 	if now - last_fired > 100:
 		var bullet = bullet_resource.instance()
-		bullet.set_owner(get_parent())
+		bullet.set_owner(self)
 		bullet.position = firing_position.global_position
 		bullet.rotate(body.rotation)
 		get_parent().add_child(bullet)
