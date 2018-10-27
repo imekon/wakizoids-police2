@@ -29,12 +29,16 @@ onready var aliensLabel = $HUD/AliensLabel
 onready var scanner = $HUD/Scanner
 onready var miner_scanner = $HUD/MinerScanner
 
+var command
+
 func _ready():
 	randomize()
 	generate_rocks(40)
 	generate_mining_ships()
 	generate_alien_ships()
 	generate_planets()
+	player.connect("player_dead", self, "on_player_dead")
+	command = false
 	
 func _physics_process(delta):
 	scoreLabel.text = "Score: " + str(player.score)
@@ -50,6 +54,12 @@ func _physics_process(delta):
 		scanner.set_medium_range_scanner()
 	elif Input.is_action_just_pressed("ui_short_range_scanner"):
 		scanner.set_short_range_scanner()
+	elif Input.is_action_just_pressed("ui_command"):
+		command = true
+	elif Input.is_action_just_pressed("ui_swarm"):
+		if command:
+			generate_alien_swarm()
+			command = false
 		
 	if rock_count < 50:
 		generate_rocks(20)
@@ -71,6 +81,18 @@ func generate_mining_ships():
 	# generate_mining_ship(mining_ship, 100, 100, "TST001")
 	for i in range(100):
 		generate_mining_ship(mining_ship, random_range(65536), random_range(65536), "MNR" + str(i + 100))
+		
+func generate_alien_swarm():
+	for i in range(50):
+		var ship
+		ship = generate_alien_ship(alien1, random_range(65536), random_range(65536))
+		ship.set_swarm()
+		ship = generate_alien_ship(alien2, random_range(65536), random_range(65536))
+		ship.set_swarm()
+		ship = generate_alien_ship(alien3, random_range(65536), random_range(65536))
+		ship.set_swarm()
+		ship = generate_alien_ship(alien4, random_range(65536), random_range(65536))
+		ship.set_swarm()
 		
 func generate_alien_ships():
 	for i in range(4):
@@ -101,8 +123,13 @@ func generate_alien_ship(resource, x, y):
 	var ship = resource.instance()
 	add_child(ship)
 	ship.position = Vector2(x, y)
+	return ship
 
 func generate_planet(resource, x, y):
 	var planet = resource.instance()
 	add_child(planet)
 	planet.position = Vector2(x, y)
+
+func on_player_dead():
+	get_tree().change_scene("res://scenes/PlayerDied.tscn")
+	

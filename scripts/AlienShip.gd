@@ -14,6 +14,7 @@ var targeting_helper
 var shields
 var firing_count
 var last_fired
+var swarming
 
 func _ready():
 	var target_helper_resource = load("res://scripts/TargetingHelper.gd")
@@ -21,6 +22,7 @@ func _ready():
 	shields = 100
 	var angle = randf() * 360
 	rotate(deg2rad(angle))
+	swarming = false
 	status = DRIFTING
 
 func _physics_process(delta):
@@ -46,6 +48,10 @@ func damage(amount):
 	if shields < 0:
 		queue_free()
 	status = TARGETING
+	
+func set_swarm():
+	status = TARGETING
+	swarming = true
 	
 func process_drifting(delta):
 	thrust = MOVEMENT * delta
@@ -133,5 +139,8 @@ func process_shooting(delta):
 		firing_count += 1
 
 	if firing_count > 5:
-		status = DRIFTING
+		if swarming:
+			status = TARGETING
+		else:
+			status = DRIFTING
 		targeting_helper.clear()
