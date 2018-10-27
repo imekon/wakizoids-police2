@@ -48,7 +48,8 @@ func _physics_process(delta):
 		
 	rotate(deg2rad(angle))
 	
-	thrust *= 0.9
+	if thrust > 1.0:
+		thrust *= 0.99
 	
 func add_credit(amount):
 	pass
