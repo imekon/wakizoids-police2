@@ -18,6 +18,8 @@ func _physics_process(delta):
 			collide.collider.get_parent().queue_free()
 		elif collide.collider.is_in_group("alien"):
 			collide.collider.damage(30)
+		elif collide.collider.is_in_group("player"):
+			collide.collider.damage(30)
 		queue_free()
 	
 	var now = OS.get_unix_time()

@@ -56,7 +56,7 @@ func process_drifting(delta):
 		shields += 1
 		
 func process_targeting(delta):
-	var ships = get_tree().get_nodes_in_group("mining_ship")
+	var ships = get_tree().get_nodes_in_group("humans")
 	var closest_distance = 999999
 	var closest_ship = null
 	for ship in ships:

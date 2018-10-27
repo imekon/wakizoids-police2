@@ -12,6 +12,8 @@ onready var firing_position = $FiringPosition
 
 onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
+signal player_dead
+
 func _ready():
 	score = 0
 	energy = 500
@@ -50,6 +52,21 @@ func _physics_process(delta):
 	
 func add_credit(amount):
 	pass
+	
+func damage(amount):
+	if shields - amount > 0:
+		shields -= amount
+		return
+		
+	shields = 0
+	var hit = amount - shields
+	
+	if energy - hit > 0:
+		energy -= hit
+		return
+		
+	energy = 0
+	emit_signal("player_dead")
 	
 func fire():
 	var now = OS.get_ticks_msec()

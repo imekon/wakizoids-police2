@@ -52,6 +52,7 @@ _sections_unfolded = [ "custom_colors", "custom_fonts", "custom_fonts/font" ]
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="." groups=[
 "mining_ship",
+"humans",
 ]]
 input_pickable = false
 collision_layer = 1

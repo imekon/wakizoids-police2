@@ -21,6 +21,8 @@ onready var mining_ship = load("res://scenes/MiningShip.tscn")
 
 onready var player = $PlayerShip
 onready var scoreLabel = $HUD/ScoreLabel
+onready var energyLabel = $HUD/EnergyLabel
+onready var shieldsLabel = $HUD/SheildsLabel
 onready var rocksLabel = $HUD/RocksLabel
 onready var minersLabel = $HUD/MinersLabel
 onready var aliensLabel = $HUD/AliensLabel
@@ -36,6 +38,8 @@ func _ready():
 	
 func _physics_process(delta):
 	scoreLabel.text = "Score: " + str(player.score)
+	energyLabel.text = "Energy: " + str(player.energy)
+	shieldsLabel.text = "Shields: " + str(player.shields)
 	var rock_count = get_tree().get_nodes_in_group("rocks").size()
 	rocksLabel.text = "Rocks: " + str(rock_count)
 	minersLabel.text = "Miners: " + str(get_tree().get_nodes_in_group("mining_ship").size())

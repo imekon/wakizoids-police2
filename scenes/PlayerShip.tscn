@@ -5,6 +5,7 @@
 
 [node name="PlayerShip" type="KinematicBody2D" groups=[
 "player",
+"humans",
 ]]
 input_pickable = false
 collision_layer = 1
