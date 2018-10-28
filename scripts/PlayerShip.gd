@@ -2,10 +2,10 @@ extends KinematicBody2D
 
 const MOVEMENT = 700.0
 
-var thrust = 0.0
-var score
-var energy
-var shields
+var thrust : float = 0.0
+var score : int
+var energy : float
+var shields : float
 var last_fired = 0
 
 onready var firing_position = $FiringPosition

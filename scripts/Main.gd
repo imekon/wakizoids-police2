@@ -29,7 +29,7 @@ onready var aliensLabel = $HUD/AliensLabel
 onready var scanner = $HUD/Scanner
 onready var miner_scanner = $HUD/MinerScanner
 
-var command
+var command : bool
 
 func _ready():
 	randomize()
@@ -64,10 +64,10 @@ func _physics_process(delta):
 	if rock_count < 50:
 		generate_rocks(20)
 	
-func random_range(value):
+func random_range(value : int):
 	return randi() % value - value / 2
 	
-func generate_rocks(count):
+func generate_rocks(count : int):
 	for i in range(count):
 		generate_rock(rock1, random_range(65536), random_range(65536))
 		generate_rock(rock2, random_range(65536), random_range(65536))
@@ -108,24 +108,24 @@ func generate_planets():
 	generate_planet(planet3, random_range(65536), random_range(65536))
 	generate_planet(planet4, random_range(65536), random_range(65536))
 	
-func generate_rock(resource, x, y):
+func generate_rock(resource, x : int, y : int):
 	var rock = resource.instance()
 	rock.position = Vector2(x, y)
 	add_child(rock)
 	
-func generate_mining_ship(resource, x, y, reg):
+func generate_mining_ship(resource, x : int, y : int, reg : String):
 	var ship = resource.instance()
 	add_child(ship)
 	ship.position = Vector2(x, y)
 	ship.set_registration(reg)
 
-func generate_alien_ship(resource, x, y):
+func generate_alien_ship(resource, x : int, y : int):
 	var ship = resource.instance()
 	add_child(ship)
 	ship.position = Vector2(x, y)
 	return ship
 
-func generate_planet(resource, x, y):
+func generate_planet(resource, x : int, y : int):
 	var planet = resource.instance()
 	add_child(planet)
 	planet.position = Vector2(x, y)

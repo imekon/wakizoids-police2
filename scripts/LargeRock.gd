@@ -8,6 +8,7 @@ func _ready():
 
 func on_body_entered(body):
 	if body.is_in_group("bullet"):
+		# something wrong here...
 		var owner_ship = body.owner_ship.get_ref()
 		if owner_ship:
 			if owner_ship.is_in_group("mining_ship"):
