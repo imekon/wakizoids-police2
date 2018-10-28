@@ -5,6 +5,7 @@ const SLEEP_TIME = 30000
 
 enum AI_STATUS { IDLE, SLEEPING, TURNING, MOVING, TURN_TO_SHOOT, SHOOTING }
 enum ROGUE_STATUS { HONEST, ROGUE_HIDDEN, ROGUE }
+enum SWARM_STATUS { NONE, COPS, MINERS, ALIENS }
 
 onready var node2d = $Node2D
 onready var registration_label = $Node2D/Registration
@@ -15,6 +16,7 @@ onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
 var ai_status
 var rogue_status
+var swarm_status
 var registration
 var credits
 var shields
@@ -35,6 +37,7 @@ func _ready():
 	# targeting_helper = target_helper_resource.new()
 	ai_status = IDLE
 	rogue_status = HONEST
+	swarm_status = NONE
 	credits = 0
 	shields = 100
 	energy = 100
@@ -58,13 +61,13 @@ func _physics_process(delta):
 			status_text = registration + ": SLEEPING"
 		TURNING:
 			process_turning(delta, miner_position)
-			status_text = registration + ": TURNING"
+			status_text = registration + ": MOVING"
 		MOVING:
 			process_moving(delta, miner_position)
-			status_text = registration + ": MOVING - %1.1f" % last_distance
+			status_text = registration + ": MOVING"
 		TURN_TO_SHOOT:
 			process_turn_to_shoot(delta, miner_position)
-			status_text = registration + ": TURN TO SHOOT"
+			status_text = registration + ": SHOOTING"
 		SHOOTING:
 			process_shooting(delta, miner_position)
 			status_text = registration + ": SHOOTING"
@@ -77,6 +80,9 @@ func set_registration(text):
 	
 func add_credit(amount):
 	credits += amount
+	
+func set_swarm_target(swarm):
+	pass
 
 func process_idle(delta, miner_position):
 	target = null

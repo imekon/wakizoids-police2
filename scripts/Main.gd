@@ -42,7 +42,7 @@ func _ready():
 	
 func _physics_process(delta):
 	scoreLabel.text = "Score: " + str(player.score)
-	energyLabel.text = "Energy: " + str(player.energy)
+	energyLabel.text = "Energy: %d" % player.energy
 	shieldsLabel.text = "Shields: " + str(player.shields)
 	var rock_count = get_tree().get_nodes_in_group("rocks").size()
 	rocksLabel.text = "Rocks: " + str(rock_count)

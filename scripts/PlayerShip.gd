@@ -20,36 +20,43 @@ func _ready():
 	shields = 200
 
 func _physics_process(delta):
+	var moving = false
 	var angle = 0.0
 
 	if Input.is_action_pressed("ui_forwards"):
-		thrust = MOVEMENT * delta
+		if energy > 30:
+			thrust = MOVEMENT * delta
+			energy -= 2
 	if Input.is_action_pressed("ui_backwards"):
-		thrust = -MOVEMENT * delta * 0.25
+		if energy > 30:
+			thrust = -MOVEMENT * delta * 0.25
+			energy -= 2
 	if Input.is_action_pressed("ui_left"):
-		angle = -2
+		if energy > 30:
+			angle = -2
+			energy -= 1
 	if Input.is_action_pressed("ui_right"):
-		angle = 2
+		if energy > 30:
+			angle = 2
+			energy -= 1
 		
 	if Input.is_action_pressed("ui_fire"):
 		fire()
 	
 	var rot = rotation_degrees
 
-	# leave this here as the non godot way to do movement
-	#var x = cos(deg2rad(-rot)) * thrust
-	#var y = -sin(deg2rad(-rot)) * thrust
-	#var direction = Vector2(x, y)
 	var direction = Vector2(thrust, 0).rotated(deg2rad(rot))
-
 	var collide = move_and_collide(direction)
 	if collide != null:
 		process_collision(collide)
 		
 	rotate(deg2rad(angle))
-	
+
 	if thrust > 1.0:
 		thrust *= 0.99
+	
+	if energy < 500:
+		energy += 40 * delta
 	
 func add_credit(amount):
 	pass
@@ -72,12 +79,14 @@ func damage(amount):
 func fire():
 	var now = OS.get_ticks_msec()
 	if now - last_fired > 100:
-		var bullet = bullet_resource.instance()
-		bullet.set_owner(self)
-		bullet.position = firing_position.global_position
-		bullet.rotate(rotation)
-		get_parent().add_child(bullet)
-		last_fired = now
+		if energy > 50:
+			var bullet = bullet_resource.instance()
+			bullet.set_owner(self)
+			bullet.position = firing_position.global_position
+			bullet.rotate(rotation)
+			get_parent().add_child(bullet)
+			last_fired = now
+			energy -= 30
 	
 func process_collision(collision):
 	print("you hit something")

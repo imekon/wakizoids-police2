@@ -28,5 +28,11 @@ __meta__ = {
 }
 
 [node name="FiringPosition" type="Position2D" parent="."]
-position = Vector2( 180, 0 )
+position = Vector2( 134, 0 )
+
+[node name="LeftPosition" type="Position2D" parent="."]
+position = Vector2( 40, -80 )
+
+[node name="RightPosition" type="Position2D" parent="."]
+position = Vector2( 40, 80 )
 
