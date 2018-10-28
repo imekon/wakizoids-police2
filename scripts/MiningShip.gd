@@ -22,19 +22,14 @@ var credits
 var shields
 var energy
 var thrust
-# var targeting_helper
-var target
-var target_position
-var target_angle
-var target_angle_offset
-var target_distance
+var targeting_helper
 var last_distance
 var last_fired = 0
 var firing_count
 
 func _ready():
-	# var target_helper_resource = load("res://scripts/TargetingHelper.gd")
-	# targeting_helper = target_helper_resource.new()
+	var target_helper_resource = load("res://scripts/TargetingHelper.gd")
+	targeting_helper = target_helper_resource.new()
 	ai_status = IDLE
 	rogue_status = HONEST
 	swarm_status = NONE
@@ -42,7 +37,6 @@ func _ready():
 	shields = 100
 	energy = 100
 	thrust = 0
-	target = null
 	var angle = randf() * 360
 	last_distance = 0
 	body.rotate(deg2rad(angle))
@@ -85,7 +79,7 @@ func set_swarm_target(swarm):
 	pass
 
 func process_idle(delta, miner_position):
-	target = null
+	targeting_helper.clear()
 	var rocks = get_tree().get_nodes_in_group("rocks")
 	var closest_rock = null
 	var closest_dist = 1000000
@@ -102,81 +96,64 @@ func process_idle(delta, miner_position):
 		ai_status = SLEEPING
 		return
 		
-	target = weakref(closest_rock)
-	target_position = closest_position
-	target_angle = rad2deg(target_position.angle_to_point(miner_position))
+	targeting_helper.set_target(closest_rock)
+	targeting_helper.plot_course_to_target(miner_position)
 	
 	ai_status = TURNING
 	
-func plot_course_to_target(miner_position):
-	if target == null:
-		last_fired = OS.get_ticks_msec()
-		ai_status = IDLE
-		return false
-	
-	if !target.get_ref():
-		last_fired = OS.get_ticks_msec()
-		ai_status = IDLE
-		target = null
-		return false
-		
-	target_position = target.get_ref().global_position
-	target_angle = rad2deg(target_position.angle_to_point(miner_position))
-	return true
-
 func process_sleep(delta):
 	var now = OS.get_ticks_msec()
 	if now - last_fired > SLEEP_TIME:
 		ai_status = IDLE
 
 func process_turning(delta, miner_position):
-	if !plot_course_to_target(miner_position):
+	if !targeting_helper.plot_course_to_target(miner_position):
 		return
 		
 	var angle = body.rotation_degrees
 	var angle_delta
 	
-	if target_angle > angle:
+	if targeting_helper.target_angle > angle:
 		angle_delta = 1
 	else:
 		angle_delta = -1
 		
-	if abs(angle - target_angle) > 1:
+	if abs(angle - targeting_helper.target_angle) > 1:
 		body.rotate(deg2rad(angle_delta))
 	else:
 		ai_status = MOVING
 
 func process_moving(delta, miner_position):
-	if !plot_course_to_target(miner_position):
+	if !targeting_helper.plot_course_to_target(miner_position):
 		return
 		
 	thrust = MOVEMENT * delta
-	body.rotation_degrees = target_angle
-	var direction = Vector2(thrust, 0).rotated(deg2rad(target_angle))
+	body.rotation_degrees = targeting_helper.target_angle
+	var direction = Vector2(thrust, 0).rotated(deg2rad(targeting_helper.target_angle))
 	var collide = body.move_and_collide(direction)
 	node2d.position = body.position
 	
-	target_distance = miner_position.distance_to(target_position)
-	last_distance = target_distance
-	if target_distance < 500:
+	var distance = miner_position.distance_to(targeting_helper.target_position)
+	last_distance = distance
+	if distance < 500:
 		firing_count = 0
 		ai_status = TURN_TO_SHOOT
 
 func process_turn_to_shoot(delta, miner_position):
-	if !plot_course_to_target(miner_position):
+	if !targeting_helper.plot_course_to_target(miner_position):
 		return
 
 	var angle = body.rotation_degrees
 	var angle_delta
 	
-	if target_angle > angle:
+	if targeting_helper.target_angle > angle:
 		angle_delta = 1
 	else:
 		angle_delta = -1
 		
-	target_angle_offset = abs(angle - target_angle)
+	var offset = abs(angle - targeting_helper.target_angle)
 		
-	if target_angle_offset > 1:
+	if offset > 1:
 		body.rotate(deg2rad(angle_delta))
 	else:
 		firing_count = 0
@@ -195,4 +172,4 @@ func process_shooting(delta, miner_position):
 
 	if firing_count > 5:
 		ai_status = SLEEPING
-		target = null
+		targeting_helper.clear()
