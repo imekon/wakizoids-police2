@@ -8,13 +8,13 @@ onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
 onready var firing_position = $FiringPosition
 
-var status
-var thrust
+var status : int
+var thrust : float
 var targeting_helper
-var shields
-var firing_count
+var shields : int
+var firing_count : int
 var last_fired
-var swarming
+var swarming : bool
 
 func _ready():
 	var target_helper_resource = load("res://scripts/TargetingHelper.gd")

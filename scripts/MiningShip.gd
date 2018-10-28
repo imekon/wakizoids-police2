@@ -14,18 +14,18 @@ onready var firing_position = $KinematicBody2D/FiringPosition
 
 onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
-var ai_status
-var rogue_status
-var swarm_status
-var registration
-var credits
-var shields
-var energy
-var thrust
+var ai_status : int
+var rogue_status : int
+var swarm_status : int
+var registration : String
+var credits : int
+var shields : int
+var energy : float
+var thrust : float
 var targeting_helper
-var last_distance
+var last_distance : float
 var last_fired = 0
-var firing_count
+var firing_count : int
 
 func _ready():
 	var target_helper_resource = load("res://scripts/TargetingHelper.gd")
@@ -68,7 +68,7 @@ func _physics_process(delta):
 			
 	registration_label.text = status_text + ": CREDITS %d" % credits
 
-func set_registration(text):
+func set_registration(text : String):
 	registration = text
 	registration_label.text = text
 	
