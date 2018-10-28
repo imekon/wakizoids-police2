@@ -11,3 +11,6 @@ func on_start_pressed():
 
 func on_credits_pressed():
 	get_tree().change_scene("res://scenes/Credits.tscn")
+
+func on_settings_pressed():
+	get_tree().change_scene("res://scenes/Settings.tscn")

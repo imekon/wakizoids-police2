@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Welcome.gd" type="Script" id=1]
 [ext_resource path="res://wildjam/BEBAS.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://wildjam/head_bg_less.png" type="Texture" id=3]
 [ext_resource path="res://fonts/SF Atarian System.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://images/cog.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -140,9 +141,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 293.0
-margin_top = 671.0
+margin_top = 673.0
 margin_right = 401.0
-margin_bottom = 712.0
+margin_bottom = 727.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -160,15 +161,42 @@ flat = false
 align = 1
 _sections_unfolded = [ "custom_fonts", "custom_fonts/font" ]
 
+[node name="SettingsButton" type="Button" parent="PanelContainer/Panel"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 413.0
+margin_top = 673.0
+margin_right = 613.0
+margin_bottom = 727.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 3 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Settings"
+icon = ExtResource( 5 )
+flat = false
+align = 1
+_sections_unfolded = [ "custom_fonts", "custom_fonts/font" ]
+
 [node name="CreditsButton" type="Button" parent="PanelContainer/Panel"]
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 429.0
-margin_top = 672.0
-margin_right = 561.0
-margin_bottom = 713.0
+margin_left = 623.0
+margin_top = 673.0
+margin_right = 755.0
+margin_bottom = 727.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -187,4 +215,5 @@ align = 1
 _sections_unfolded = [ "custom_fonts", "custom_fonts/font" ]
 
 [connection signal="pressed" from="PanelContainer/Panel/StartButton" to="." method="on_start_pressed"]
+[connection signal="pressed" from="PanelContainer/Panel/SettingsButton" to="." method="on_settings_pressed"]
 [connection signal="pressed" from="PanelContainer/Panel/CreditsButton" to="." method="on_credits_pressed"]
