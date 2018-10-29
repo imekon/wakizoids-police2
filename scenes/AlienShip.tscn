@@ -3,6 +3,7 @@
 [ext_resource path="res://scripts/AlienShip.gd" type="Script" id=1]
 
 [node name="AlienShip" type="KinematicBody2D" groups=[
+"ships",
 "alien",
 ]]
 input_pickable = false

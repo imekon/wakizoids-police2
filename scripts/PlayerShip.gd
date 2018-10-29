@@ -7,8 +7,11 @@ var score : int
 var energy : float
 var shields : float
 var last_fired = 0
+var fire_cycle = 0
 
 onready var firing_position = $FiringPosition
+onready var left_firing = $LeftPosition
+onready var right_firing = $RightPosition
 
 onready var bullet_resource = load("res://scenes/Bullet.tscn")
 
@@ -82,12 +85,24 @@ func fire():
 		if energy > 50:
 			var bullet = bullet_resource.instance()
 			bullet.set_owner(self)
-			bullet.position = firing_position.global_position
+			match fire_cycle:
+				0:
+					bullet.position = firing_position.global_position
+				1:
+					bullet.position = left_firing.global_position
+				2:
+					bullet.position = right_firing.global_position
+			fire_cycle += 1
+			if fire_cycle > 2:
+				fire_cycle = 0
 			bullet.rotate(rotation)
 			get_parent().add_child(bullet)
 			last_fired = now
 			energy -= 30
 	
-func process_collision(collision):
-	print("you hit something")
+func process_collision(collision : KinematicCollision2D):
+	if collision.collider.is_in_group("rocks"):
+		damage(20)
+	elif collision.collider.is_in_group("ships"):
+		damage(40)
 	
