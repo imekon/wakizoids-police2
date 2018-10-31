@@ -26,6 +26,7 @@ var targeting_helper
 var last_distance : float
 var last_fired = 0
 var firing_count : int
+var proximity_alert: bool
 
 func _ready():
 	var target_helper_resource = load("res://scripts/TargetingHelper.gd")
@@ -40,6 +41,7 @@ func _ready():
 	var angle = randf() * 360
 	last_distance = 0
 	body.rotate(deg2rad(angle))
+	proximity_alert = false
 
 func _physics_process(delta):
 	var miner_position = body.global_position
@@ -124,6 +126,9 @@ func process_turning(delta, miner_position):
 		ai_status = MOVING
 
 func process_moving(delta, miner_position):
+	if proximity_alert:
+		return
+		
 	if !targeting_helper.plot_course_to_target(miner_position):
 		return
 		

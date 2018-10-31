@@ -63,6 +63,8 @@ func _physics_process(delta):
 		
 	if rock_count < 50:
 		generate_rocks(20)
+		
+	check_proximity()
 	
 func random_range(value : int):
 	return randi() % value - value / 2
@@ -129,6 +131,21 @@ func generate_planet(resource, x : int, y : int):
 	var planet = resource.instance()
 	add_child(planet)
 	planet.position = Vector2(x, y)
+	
+func check_proximity():
+	var ships = get_tree().get_nodes_in_group("mining_ship")
+	for ship1 in ships:
+		ship1.get_parent().proximity_alert = false
+		var pos1 = ship1.global_position
+		for ship2 in ships:
+			if ship1 == ship2:
+				continue
+				
+			var pos2 = ship2.global_position
+			
+			var distance = pos1.distance_to(pos2)
+			if distance < 500 && !ship2.get_parent().proximity_alert:
+				ship1.get_parent().proximity_alert = true
 
 func on_player_dead():
 	get_tree().change_scene("res://scenes/PlayerDied.tscn")

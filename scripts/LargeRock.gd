@@ -11,7 +11,7 @@ func on_body_entered(body):
 		# something wrong here...
 		var owner_ship = body.owner_ship.get_ref()
 		if owner_ship:
-			if owner_ship.is_in_group("mining_ship"):
+			if owner_ship.is_in_group("mining"):
 				owner_ship.add_credit(20)
 		body.queue_free()
 		queue_free()

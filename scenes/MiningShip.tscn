@@ -14,7 +14,9 @@ use_filter = false
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="MiningShip" type="Node2D"]
+[node name="MiningShip" type="Node2D" groups=[
+"mining",
+]]
 script = ExtResource( 1 )
 _sections_unfolded = [ "Script" ]
 __meta__ = {
@@ -52,8 +54,8 @@ _sections_unfolded = [ "custom_colors", "custom_fonts", "custom_fonts/font" ]
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="." groups=[
 "mining_ship",
-"humans",
 "ships",
+"humans",
 ]]
 input_pickable = false
 collision_layer = 1
